@@ -9,6 +9,10 @@ public class MeshDeformer : MonoBehaviour
     {
         // 매시 버텍스 정보 가져오기
         _deformingMesh = GetComponent<MeshFilter>().mesh;
+        if(_deformingMesh == null)
+        {
+            Debug.Log("There's no mesh");
+        }
         _originalVertices = _deformingMesh.vertices;
         _displacedVertices = new Vector3[_originalVertices.Length];
         for (int i = 0; i < _originalVertices.Length; i++)
