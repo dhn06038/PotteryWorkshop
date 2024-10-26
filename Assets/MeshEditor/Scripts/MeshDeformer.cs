@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MeshDeformer : MonoBehaviour
 {
     private Mesh _deformingMesh;
     private Vector3[] _originalVertices, _displacedVertices;
+
+    public float deformRadius = 0.5f; // 변형 반경
+    public float deformStrength = 0.2f; // 변형 강도
 
     private void Start()
     {
@@ -44,6 +48,43 @@ public class MeshDeformer : MonoBehaviour
             }
         }
         return nearVectex;
+    }
+
+    public void DeformVertices(Vector3 worldPosition, Vector3 deformerPoint)
+    {
+        int[] nearbyVertexIndices = GetNearbyVertices(worldPosition);
+
+        foreach (int index in nearbyVertexIndices)
+        {
+            Vector3 vertexWorldPos = this.transform.TransformPoint(_displacedVertices[index]);
+            float distance = Vector3.Distance(vertexWorldPos, worldPosition);
+
+            // 거리에 따라 강도 감소
+            float deformFactor = Mathf.Lerp(deformStrength, 0, distance / deformRadius);
+            Vector3 direction = (deformerPoint - vertexWorldPos).normalized;
+            _displacedVertices[index] += direction * deformFactor;
+        }
+
+        _deformingMesh.vertices = _displacedVertices;
+        _deformingMesh.RecalculateNormals();
+    }
+
+    private int[] GetNearbyVertices(Vector3 worldPosition)
+    {
+        List<int> nearbyIndices = new List<int>();
+        float sqrRadius = deformRadius * deformRadius;
+
+        for (int i = 0; i < _displacedVertices.Length; i++)
+        {
+            Vector3 vertexWorldPos = this.transform.TransformPoint(_displacedVertices[i]);
+            float sqrDistance = (vertexWorldPos - worldPosition).sqrMagnitude;
+
+            if (sqrDistance < sqrRadius) // 변형 반경 내에 있는 버텍스 추가
+            {
+                nearbyIndices.Add(i);
+            }
+        }
+        return nearbyIndices.ToArray();
     }
 
     /// <summary>
