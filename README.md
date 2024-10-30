@@ -10,6 +10,6 @@ In order to freely transform the shape like the actual ceramic manufacturing pro
 
 **Mesh Deformer in VR**
 
-The mesh can be transformed even within the VR environment by using the Mesh Deformer script. Now, controller is used for carving, but in the future, trying to provide a feeling of brushing by hand.
+The mesh can be transformed even within the VR environment by using the Mesh Deformer script. Now, controller is used for carving, but in the future, it will be changed to provide a feeling of brushing by hand.
 
 <img src="https://github.com/user-attachments/assets/39f43f71-c123-4fd8-9ece-a26236ca06af" width="80%" height="45%"/>
