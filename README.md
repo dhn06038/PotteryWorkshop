@@ -1,6 +1,15 @@
 # PotteryWorkshop
 Repository for Pottery Workshop Simulator using VR
 
+
+**Main Features**
+
+You can make your own pottery.
+
+After baking, it can be decorated using the painting function.
+
+
+
 **Custom Mesh Generator for vertexes(left)**
 
 In order to freely transform the shape like the actual ceramic manufacturing process, far more vertexes were required than the cylinder object provided by Unity, and this was implemented through the Custom Mesh Generator script.
