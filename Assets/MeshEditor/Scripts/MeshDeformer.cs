@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MeshDeformer : MonoBehaviour
@@ -8,6 +9,7 @@ public class MeshDeformer : MonoBehaviour
 
     public float deformRadius = 0.5f; // 변형 반경
     public float deformStrength = 0.2f; // 변형 강도
+    public float maxDeformAmount = 0.1f;
 
     private void Start()
     {
@@ -60,9 +62,19 @@ public class MeshDeformer : MonoBehaviour
             float distance = Vector3.Distance(vertexWorldPos, worldPosition);
 
             // 거리에 따라 강도 감소
-            float deformFactor = Mathf.Lerp(deformStrength, 0, distance / deformRadius);
+            //float deformFactor = Mathf.Lerp(deformStrength, 0, distance / deformRadius);
+            float deformFactor = deformStrength * Mathf.Exp(-distance * distance / (2 * deformRadius * deformRadius));
             Vector3 direction = (deformerPoint - vertexWorldPos).normalized;
-            _displacedVertices[index] += direction * deformFactor;
+            Vector3 targetPosition = _displacedVertices[index] + direction * deformFactor;
+
+            //_displacedVertices[index] += direction * deformFactor;
+
+            Vector3 displacement = targetPosition - _displacedVertices[index];
+            if (displacement.magnitude > maxDeformAmount)
+            {
+                displacement = displacement.normalized * maxDeformAmount;
+            }
+            _displacedVertices[index] += displacement;
         }
 
         _deformingMesh.vertices = _displacedVertices;
