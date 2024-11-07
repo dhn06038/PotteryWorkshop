@@ -140,8 +140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ec3180004d9cd94991c827e98ca0c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deformRadius: 1
+  deformRadius: 2
   deformStrength: 0.5
+  maxDeformAmount: 0.001
 --- !u!136 &32962855
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -339,6 +340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deformRadius: 0.5
   deformStrength: 0.2
+  maxDeformAmount: 0.1
 --- !u!135 &805854690
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -761,6 +763,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deformRadius: 0.5
   deformStrength: 0.2
+  maxDeformAmount: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
