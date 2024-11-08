@@ -4,7 +4,7 @@ Repository for Pottery Workshop Simulator using VR
 
 **Main Features**
 
-You can make your own pottery.
+You can make your own pottery in VR environment.
 
 After baking, it can be decorated using the painting function.
 
