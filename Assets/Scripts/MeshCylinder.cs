@@ -21,6 +21,7 @@ public class MeshCylinder : MonoBehaviour
         // 정점 계산
         int vertexCount = (edges * (heightSegments + 1)) + 2; // 각 높이 세그먼트마다 정점을 추가 + 상단, 하단 중심점
         Vector3[] vertices = new Vector3[vertexCount]; // 정점 배열
+        Vector3[] normals = new Vector3[vertexCount]; // 법선 배열 추가
         Vector2[] uv = new Vector2[vertexCount];
         int[] triangles = new int[edges * heightSegments * 6 + edges * 6]; // 옆면과 상하단을 위한 삼각형 배열
 
@@ -38,6 +39,7 @@ public class MeshCylinder : MonoBehaviour
                 float x = Mathf.Sin(rad);
                 float z = Mathf.Cos(rad);
                 vertices[vertIndex] = new Vector3(x, yPos, z);
+                normals[vertIndex] = new Vector3(x, 0, z).normalized; // 각 점의 법선을 방사형으로 설정
                 uv[vertIndex] = new Vector2((x + 1) * 0.5f, (z + 1) * 0.5f);
                 vertIndex++;
             }
@@ -45,10 +47,12 @@ public class MeshCylinder : MonoBehaviour
 
         // 상하단 원 중심점 추가
         vertices[vertIndex] = new Vector3(0, 0, 0); // 하단 원 중심
+        normals[vertIndex] = Vector3.down; // 하단 법선
         uv[vertIndex] = new Vector2(0.5f, 0.5f);
         int bottomCenterIndex = vertIndex++;
 
         vertices[vertIndex] = new Vector3(0, height, 0); // 상단 원 중심
+        normals[vertIndex] = Vector3.up; // 상단 법선
         uv[vertIndex] = new Vector2(0.5f, 0.5f);
         int topCenterIndex = vertIndex++;
 
@@ -99,6 +103,7 @@ public class MeshCylinder : MonoBehaviour
 
         // 메쉬 설정
         mesh.vertices = vertices;
+        mesh.normals = normals;
         mesh.uv = uv;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();

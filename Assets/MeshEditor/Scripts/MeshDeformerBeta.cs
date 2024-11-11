@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MeshDeformer : MonoBehaviour
+public class MeshDeformerBeta : MonoBehaviour
 {
     private Mesh _deformingMesh;
     private Vector3[] _originalVertices, _displacedVertices;
@@ -56,6 +56,9 @@ public class MeshDeformer : MonoBehaviour
     {
         int[] nearbyVertexIndices = GetNearbyVertices(worldPosition);
 
+        _deformingMesh.RecalculateNormals();
+        Vector3[] normals = _deformingMesh.normals;
+
         foreach (int index in nearbyVertexIndices)
         {
             Vector3 vertexWorldPos = this.transform.TransformPoint(_displacedVertices[index]);
@@ -63,36 +66,28 @@ public class MeshDeformer : MonoBehaviour
             float distance = Vector3.Distance(vertexWorldPos, worldPosition);
 
             // 거리에 따라 강도 감소
-            
+            //float deformFactor = Mathf.Lerp(deformStrength, 0, distance / deformRadius);
             float deformFactor = deformStrength * Mathf.Exp(-distance * distance / (2 * deformRadius * deformRadius));
 
-
             Vector3 vertexLocalPos = transform.InverseTransformPoint(vertexWorldPos);
-            float angle = Mathf.Atan2(vertexLocalPos.x, vertexLocalPos.z);
+            float angle = Mathf.Atan2(vertexLocalPos.z, vertexLocalPos.x);
 
-            float angleDeg = angle * Mathf.Rad2Deg;
-            if (angleDeg <= 0)
-            {
-                angleDeg += 360f;
-            }
+            // 변형 방향 가중치 계산 (절댓값 사용)
+            float directionMultiplier = Mathf.Abs(Mathf.Cos(angle));
 
-            bool isFirstSide = angleDeg > 180f && angleDeg <= 360f;
-
-            // 변형 방향 계산
-            Vector3 direction = (deformerPoint - vertexWorldPos).normalized;
-
-            // 한쪽 면에 대해 변형 방향 반전
-            if (isFirstSide)
-            {
-                direction = -direction;
-            }
+            // 변형 방향을 버텍스의 법선으로 설정
+            Vector3 normalWorld = this.transform.TransformDirection(normals[index]).normalized;
+            Vector3 direction = normalWorld * directionMultiplier;
 
             // 변형 적용
             Vector3 displacement = direction * deformFactor;
+
+            // 최대 변형량 제한
             if (displacement.magnitude > maxDeformAmount)
             {
                 displacement = displacement.normalized * maxDeformAmount;
             }
+
             _displacedVertices[index] += displacement;
         }
 
