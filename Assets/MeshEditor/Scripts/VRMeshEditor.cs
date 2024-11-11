@@ -3,17 +3,44 @@ using UnityEngine;
 public class VRMeshEditor : MonoBehaviour
 {
     public GameObject pointer;
-    public GameObject controller; // 컨트롤러 오브젝트, OVRControllerPrefab 등
+    //public GameObject controller; // 컨트롤러 오브젝트, OVRControllerPrefab 등
 
     private MeshDeformer _targetMeshDeformer = null;
-    private Vector3? _targetVertexPos;
+    //private Vector3? _targetVertexPos;
 
-    private void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        pointer.SetActive(false);
+        // Cylinder에 부착된 MeshDeformer를 가져옴
+        MeshDeformer deformer = GetComponent<MeshDeformer>();
+        if (deformer != null)
+        {
+            _targetMeshDeformer = deformer;
+            Debug.Log("Trigger entered");
+        }
     }
 
-    private void Update()
+    private void OnTriggerStay(Collider other)
+    {
+        if (_targetMeshDeformer != null)
+        {
+            // 손끝의 공 위치를 기반으로 메쉬 변형
+            Vector3 contactPoint = pointer.transform.position;
+            Vector3 transformPoint = new Vector3(transform.position.x, contactPoint.y, transform.position.z);
+            _targetMeshDeformer.DeformVertices(contactPoint, transformPoint);  // 현재 위치를 변형점으로 사용
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // 충돌이 끝나면 타겟 초기화
+        if (GetComponent<MeshDeformer>() == _targetMeshDeformer)
+        {
+            _targetMeshDeformer = null;
+            Debug.Log("Trigger exit");
+        }
+    }
+
+    /*private void Update()
     {
         bool isPressLeft = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger); // 트리거 버튼
         bool isPressRight = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger); // 그립 버튼
@@ -65,5 +92,5 @@ public class VRMeshEditor : MonoBehaviour
             _targetMeshDeformer = null;
             _targetVertexPos = null;
         }
-    }
+    }*/
 }
