@@ -10,6 +10,8 @@ Also baking pottery is possible.
 
 After baking, it can be decorated using the painting function.
 
+You can move each section with teleportation.
+
 
 
 **Custom Mesh Generator for vertexes(left)**
