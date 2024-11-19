@@ -32,6 +32,11 @@ The mesh can be transformed even within the VR environment by using the Mesh Def
 <img src="https://github.com/user-attachments/assets/55aa6b5e-2d79-4af6-8671-e5cf8d46adf6" width="80%" height="45%"/>
 
 
+**Teleportation for each section**
+
+<img src="https://github.com/user-attachments/assets/2e3b3a20-5fb6-4e9a-98d0-1ecd30870385" width="80%" height="45%"/>
+
+
 **Modeling for kiln**
 
 <img src="https://github.com/user-attachments/assets/8c783c97-05c6-448d-b378-ef2375557325" width="80%" height="45%"/>
