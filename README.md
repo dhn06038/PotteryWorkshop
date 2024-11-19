@@ -27,6 +27,7 @@ The mesh can be transformed even within the VR environment by using the Mesh Def
 
 <img src="https://github.com/user-attachments/assets/318b6e48-9e9d-4494-8140-63697db86364" width="80%" height="45%"/>
 
+![회전3](https://github.com/user-attachments/assets/69648f67-1635-4a34-b799-395d35627c26)
 
 **Crashed Pot asset**
 
