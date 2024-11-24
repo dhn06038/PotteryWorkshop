@@ -651,6 +651,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 677549210293222971, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 677549210293222971, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -666,6 +670,10 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 1485718085196498478, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+      propertyPath: m_text
+      value: Done?
+      objectReference: {fileID: 0}
     - target: {fileID: 1510459984575716235, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -735,6 +743,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2997347701711024242, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+      propertyPath: m_text
+      value: Cancle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997347701711024242, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -743,6 +755,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3962071771708881005, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+      propertyPath: m_text
+      value: Confirm
+      objectReference: {fileID: 0}
+    - target: {fileID: 3962071771708881005, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -750,6 +766,10 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 4692543055633971691, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+      propertyPath: m_Name
+      value: ConfirmButton
+      objectReference: {fileID: 0}
     - target: {fileID: 4742822259919951392, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
       propertyPath: m_Name
       value: Panel
@@ -851,6 +871,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8670368855223954328, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8670368855223954328, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -858,11 +882,54 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 8671857360300885387, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+      propertyPath: m_Name
+      value: CancleButton
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2750390551369745774, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 5904326910879674319, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+    - {fileID: 8060892793285186267, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+    - {fileID: 2708094182956029855, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+    - {fileID: 2616839476192502375, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2159287421019954799, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1295620425}
   m_SourcePrefab: {fileID: 100100000, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+--- !u!1 &1295620424 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2159287421019954799, guid: 13683f59f0b3fad44865581a2a0bfb8d, type: 3}
+  m_PrefabInstance: {fileID: 1295620423}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1295620425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295620424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 8
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1001 &1369488438
 PrefabInstance:
   m_ObjectHideFlags: 0
