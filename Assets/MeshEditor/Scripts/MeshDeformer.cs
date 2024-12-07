@@ -11,6 +11,7 @@ public class MeshDeformer : MonoBehaviour
     public float deformStrength = 0.2f; // 변형 강도
     public float maxDeformAmount = 0.1f;
 
+
     private void Start()
     {
         // 매시 버텍스 정보 가져오기
@@ -26,12 +27,6 @@ public class MeshDeformer : MonoBehaviour
             _displacedVertices[i] = _originalVertices[i];
         }
     }
-
-    /// <summary>
-    /// 월드 포지션에서 가장 근접한 버텍스 반환하기
-    /// </summary>
-    /// <param name="worldPosition"></param>
-    /// <returns></returns>
     public Vector3? GetNearVertex(Vector3 worldPosition)
     {
         Vector3 position = this.transform.position;
@@ -58,47 +53,52 @@ public class MeshDeformer : MonoBehaviour
 
         foreach (int index in nearbyVertexIndices)
         {
+            // 버텍스의 월드 좌표 -> 로컬 좌표로 변환
             Vector3 vertexWorldPos = this.transform.TransformPoint(_displacedVertices[index]);
+            Vector3 vertexLocalPos = this.transform.InverseTransformPoint(vertexWorldPos);
 
+            // 로컬 x-z 평면에서 중심을 향한 방향 계산
+            Vector3 radialDirection = new Vector3(vertexLocalPos.x, 0, vertexLocalPos.z).normalized;
+
+            // 반경 방향을 반대로 설정하여 항상 내부로 향하도록 강제
+            Vector3 inwardDirection = -radialDirection;
+
+            // 거리 기반 가중치 계산
             float distance = Vector3.Distance(vertexWorldPos, worldPosition);
+            float weight = 1f - (distance / deformRadius);
+            weight = Mathf.Clamp01(weight);
 
-            // 거리에 따라 강도 감소
-            
-            float deformFactor = deformStrength * Mathf.Exp(-distance * distance / (2 * deformRadius * deformRadius));
+            // 변형 강도 계산
+            float deformFactor = deformStrength * weight;
 
+            // 최종 변형 방향 및 강도 계산
+            Vector3 direction = inwardDirection * deformFactor;
 
-            Vector3 vertexLocalPos = transform.InverseTransformPoint(vertexWorldPos);
-            float angle = Mathf.Atan2(vertexLocalPos.x, vertexLocalPos.z);
-
-            float angleDeg = angle * Mathf.Rad2Deg;
-            if (angleDeg <= 0)
+            // 최대 변형량 제한
+            if (direction.magnitude > maxDeformAmount)
             {
-                angleDeg += 360f;
-            }
-
-            bool isFirstSide = angleDeg > 180f && angleDeg <= 360f;
-
-            // 변형 방향 계산
-            Vector3 direction = (deformerPoint - vertexWorldPos).normalized;
-
-            // 한쪽 면에 대해 변형 방향 반전
-            if (isFirstSide)
-            {
-                direction = -direction;
+                direction = direction.normalized * maxDeformAmount;
             }
 
             // 변형 적용
-            Vector3 displacement = direction * deformFactor;
-            if (displacement.magnitude > maxDeformAmount)
-            {
-                displacement = displacement.normalized * maxDeformAmount;
-            }
-            _displacedVertices[index] += displacement;
+            _displacedVertices[index] += direction;
+
+            // 디버그 시각화
+            Debug.DrawRay(vertexWorldPos, inwardDirection * 0.1f, Color.green, 0.1f); // 방향
+            Debug.DrawRay(vertexWorldPos, direction, Color.red, 0.1f); // 최종 변형
         }
 
+        // 업데이트된 버텍스를 적용
         _deformingMesh.vertices = _displacedVertices;
         _deformingMesh.RecalculateNormals();
     }
+
+
+
+
+
+
+
 
     private int[] GetNearbyVertices(Vector3 worldPosition)
     {
