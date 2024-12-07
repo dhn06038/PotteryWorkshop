@@ -66,7 +66,7 @@ public class PanelTrigger : MonoBehaviour
     void ShowPanel()
     {
         yesNoPanel.SetActive(true);
-        yesNoPanel.transform.position = cameraTransform.position + cameraTransform.forward * 0.4f - cameraTransform.right * 0.1f; // 카메라 앞 0.4미터
+        yesNoPanel.transform.position = cameraTransform.position + cameraTransform.forward * 0.4f;  // 카메라 앞 0.4미터
         yesNoPanel.transform.rotation = Quaternion.LookRotation(cameraTransform.forward);
         isPanelActive = true;
         Debug.Log("패널 활성화");
