@@ -3,10 +3,10 @@ using UnityEngine;
 public class MeshCylinder : MonoBehaviour
 {
     public Texture2D texture;
-    [Min(3)] public int edges = 64; // ¿øÀÇ ¿§Áö ¼ö (»óÇÏ´ÜÀÇ ¿øÀ» ±¸¼ºÇÏ´Â ¿§Áö)
-    public float height = 2.0f; // ¿ø±âµÕÀÇ ³ôÀÌ
-    public int heightSegments = 10; // ¿·¸éÀ» ¼öÁ÷À¸·Î ÂÉ°³´Â ¼¼±×¸ÕÆ® ¼ö
-    public string shaderName = "Unlit/Texture"; // Unlit ¼ÎÀÌ´õ »ç¿ë
+    [Min(3)] public int edges = 64; // ìµœì†Œ ì‚¼ê°í˜• ìˆ˜ (ë” ë§ì€ ì‚¼ê°í˜•ì´ ë” ë¶€ë“œëŸ¬ì›€)
+    public float height = 2.0f; // ì‹¤ë¦°ë”ì˜ ë†’ì´
+    public int heightSegments = 10; // ì‹¤ë¦°ë”ì˜ ë†’ì´ ì„¸ê·¸ë¨¼íŠ¸ ìˆ˜
+    public string shaderName = "Unlit/Texture"; // Unlit ì…°ì´ë” ì‚¬ìš©
 
     private void Awake()
     {
@@ -14,23 +14,23 @@ public class MeshCylinder : MonoBehaviour
         MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
         renderer.material = new Material(Shader.Find(shaderName));
         renderer.material.mainTexture = texture;
-        renderer.material.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off); // ¾ç¸é ·»´õ¸µ
+        renderer.material.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off); // ë’·ë©´ ì»¬ë§ ë¹„í™œì„±í™”
 
         Mesh mesh = new Mesh();
 
-        // Á¤Á¡ °è»ê
-        int vertexCount = (edges * (heightSegments + 1)) + 2; // °¢ ³ôÀÌ ¼¼±×¸ÕÆ®¸¶´Ù Á¤Á¡À» Ãß°¡ + »ó´Ü, ÇÏ´Ü Áß½ÉÁ¡
-        Vector3[] vertices = new Vector3[vertexCount]; // Á¤Á¡ ¹è¿­
-        Vector3[] normals = new Vector3[vertexCount]; // ¹ı¼± ¹è¿­ Ãß°¡
+        // ì •ì  ê³„ì‚°
+        int vertexCount = (edges * (heightSegments + 1)) + 2; // ì¸¡ë©´ ì‚¼ê°í˜• ìˆ˜ + ìƒë‹¨, í•˜ë‹¨ ì›ì˜ ì •ì  ìˆ˜
+        Vector3[] vertices = new Vector3[vertexCount]; // ì •ì  ë°°ì—´
+        Vector3[] normals = new Vector3[vertexCount]; // ì •ì  ë°°ì—´ ì¶”ê°€
         Vector2[] uv = new Vector2[vertexCount];
-        int[] triangles = new int[edges * heightSegments * 6 + edges * 6]; // ¿·¸é°ú »óÇÏ´ÜÀ» À§ÇÑ »ï°¢Çü ¹è¿­
+        int[] triangles = new int[edges * heightSegments * 6 + edges * 6]; // ì‚¼ê°í˜• ì¸ë±ìŠ¤ ë°°ì—´
 
-        // °¢ ³ôÀÌ ¼¼±×¸ÕÆ®ÀÇ ³ôÀÌ
+        // ì¸¡ë©´ ì‚¼ê°í˜• ê³„ì‚°
         float segmentHeight = height / heightSegments;
 
-        // Á¤Á¡ »ı¼º
+        // ì •ì  ê³„ì‚°
         int vertIndex = 0;
-        for (int y = 0; y <= heightSegments; y++) // °¢ ¼¼±×¸ÕÆ®¸¶´Ù ³ôÀÌ¸¦ °è»êÇÏ¿© Á¤Á¡ »ı¼º
+        for (int y = 0; y <= heightSegments; y++) // ë†’ì´ ì„¸ê·¸ë¨¼íŠ¸ ìˆ˜ë§Œí¼ ë°˜ë³µí•˜ì—¬ ì •ì  ê³„ì‚°
         {
             float yPos = y * segmentHeight;
             for (int i = 0; i < edges; i++)
@@ -39,24 +39,24 @@ public class MeshCylinder : MonoBehaviour
                 float x = Mathf.Sin(rad);
                 float z = Mathf.Cos(rad);
                 vertices[vertIndex] = new Vector3(x, yPos, z);
-                normals[vertIndex] = new Vector3(x, 0, z).normalized; // °¢ Á¡ÀÇ ¹ı¼±À» ¹æ»çÇüÀ¸·Î ¼³Á¤
+                normals[vertIndex] = new Vector3(x, 0, z).normalized; // ì¸¡ë©´ ì •ì ì˜ ë²•ì„  ë²¡í„° ê³„ì‚°
                 uv[vertIndex] = new Vector2((x + 1) * 0.5f, (z + 1) * 0.5f);
                 vertIndex++;
             }
         }
 
-        // »óÇÏ´Ü ¿ø Áß½ÉÁ¡ Ãß°¡
-        vertices[vertIndex] = new Vector3(0, 0, 0); // ÇÏ´Ü ¿ø Áß½É
-        normals[vertIndex] = Vector3.down; // ÇÏ´Ü ¹ı¼±
+        // í•˜ë‹¨ ì›ì˜ ì¤‘ì‹¬ ì •ì  ì¶”ê°€
+        vertices[vertIndex] = new Vector3(0, 0, 0); // í•˜ë‹¨ ì›ì˜ ì¤‘ì‹¬ ì •ì 
+        normals[vertIndex] = Vector3.down; // í•˜ë‹¨ ì›ì˜ ë²•ì„  ë²¡í„°
         uv[vertIndex] = new Vector2(0.5f, 0.5f);
         int bottomCenterIndex = vertIndex++;
 
-        vertices[vertIndex] = new Vector3(0, height, 0); // »ó´Ü ¿ø Áß½É
-        normals[vertIndex] = Vector3.up; // »ó´Ü ¹ı¼±
+        vertices[vertIndex] = new Vector3(0, height, 0); // ìƒë‹¨ ì›ì˜ ì¤‘ì‹¬ ì •ì 
+        normals[vertIndex] = Vector3.up; // ìƒë‹¨ ì›ì˜ ë²•ì„  ë²¡í„°
         uv[vertIndex] = new Vector2(0.5f, 0.5f);
         int topCenterIndex = vertIndex++;
 
-        // ¿·¸é »ï°¢Çü »ı¼º (Á¤Á¡ ¼ø¼­ À¯Áö)
+        // ì‚¼ê°í˜• ì¸ë±ìŠ¤ ê³„ì‚° (ì¸¡ë©´ ì‚¼ê°í˜•)
         int triIndex = 0;
         for (int y = 0; y < heightSegments; y++)
         {
@@ -67,12 +67,12 @@ public class MeshCylinder : MonoBehaviour
                 int upperCurrent = current + edges;
                 int upperNext = next + edges;
 
-                // Ã¹ ¹øÂ° »ï°¢Çü
+                // ì²« ë²ˆì§¸ ì‚¼ê°í˜•
                 triangles[triIndex] = current;
                 triangles[triIndex + 1] = next;
                 triangles[triIndex + 2] = upperCurrent;
 
-                // µÎ ¹øÂ° »ï°¢Çü
+                // ë‘ ë²ˆì§¸ ì‚¼ê°í˜•
                 triangles[triIndex + 3] = next;
                 triangles[triIndex + 4] = upperNext;
                 triangles[triIndex + 5] = upperCurrent;
@@ -81,27 +81,27 @@ public class MeshCylinder : MonoBehaviour
             }
         }
 
-        // ÇÏ´Ü »ï°¢Çü »ı¼º (Á¤Á¡ ¼ø¼­ ¹İ½Ã°è ¹æÇâ)
+        // í•˜ë‹¨ ì‚¼ê°í˜• ê³„ì‚° (ì›ì˜ ì¤‘ì‹¬ ì •ì  ê¸°ì¤€ ì‚¼ê°í˜•)
         for (int i = 0; i < edges; i++)
         {
             int next = (i + 1) % edges;
-            triangles[triIndex] = bottomCenterIndex; // ÇÏ´Ü Áß½É
+            triangles[triIndex] = bottomCenterIndex; // í•˜ë‹¨ ì›ì˜ ì¤‘ì‹¬ ì •ì 
             triangles[triIndex + 1] = next;
             triangles[triIndex + 2] = i;
             triIndex += 3;
         }
 
-        // »ó´Ü »ï°¢Çü »ı¼º (Á¤Á¡ ¼ø¼­ ¹İ½Ã°è ¹æÇâ)
+        // ìƒë‹¨ ì‚¼ê°í˜• ê³„ì‚° (ì›ì˜ ì¤‘ì‹¬ ì •ì  ê¸°ì¤€ ì‚¼ê°í˜•)
         for (int i = 0; i < edges; i++)
         {
             int next = (i + 1) % edges;
-            triangles[triIndex] = topCenterIndex; // »ó´Ü Áß½É
+            triangles[triIndex] = topCenterIndex; // ìƒë‹¨ ì›ì˜ ì¤‘ì‹¬ ì •ì 
             triangles[triIndex + 1] = i + edges * heightSegments;
             triangles[triIndex + 2] = next + edges * heightSegments;
             triIndex += 3;
         }
 
-        // ¸Ş½¬ ¼³Á¤
+        // ë©”ì‰¬ ìƒì„±
         mesh.vertices = vertices;
         mesh.normals = normals;
         mesh.uv = uv;
@@ -109,5 +109,49 @@ public class MeshCylinder : MonoBehaviour
         mesh.RecalculateNormals();
 
         filter.mesh = mesh;
+    }
+
+    public GameObject CreateGrabbableCopy()
+    {
+        // ìƒˆë¡œìš´ ê²Œì„ì˜¤ë¸Œì íŠ¸ ìƒì„±
+        GameObject copy = new GameObject("Grabbable Cylinder");
+        
+        // ë©”ì‰¬ í•„í„°ì™€ ë Œë”ëŸ¬ ê°€ì ¸ì˜¤ê¸°
+        MeshFilter originalFilter = GetComponent<MeshFilter>();
+        MeshRenderer originalRenderer = GetComponent<MeshRenderer>();
+        
+        // ìƒˆ ì˜¤ë¸Œì íŠ¸ì— ë©”ì‰¬ í•„í„°ì™€ ë Œë”ëŸ¬ ì¶”ê°€
+        MeshFilter newFilter = copy.AddComponent<MeshFilter>();
+        MeshRenderer newRenderer = copy.AddComponent<MeshRenderer>();
+        
+        // ë©”ì‰¬ì™€ ë¨¸í‹°ë¦¬ì–¼ ë³µì‚¬
+        newFilter.mesh = Instantiate(originalFilter.mesh);
+        newRenderer.material = new Material(originalRenderer.material);
+        
+        // í¬ê¸°ì™€ íšŒì „ ë³µì‚¬
+        copy.transform.localScale = transform.localScale;
+        copy.transform.rotation = transform.rotation;
+        
+        // Rigidbody ì¶”ê°€ ë° ì„¤ì •
+        Rigidbody rb = copy.AddComponent<Rigidbody>();
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        rb.drag = 1f;         // ê³µê¸° ì €í•­ ì¶”ê°€
+        rb.angularDrag = 1f;  // íšŒì „ ì €í•­ ì¶”ê°€
+        rb.mass = 1f;         // ì§ˆëŸ‰ ì„¤ì •
+        
+        // OVR ì»´í¬ë„ŒíŠ¸ë“¤ ì¶”ê°€
+        var grabbable = copy.AddComponent<OVRGrabbable>();
+    
+        // í¬í¬ ì¸í„°ë™ì…˜ì„ ìœ„í•œ ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+        var pokeInteractable = copy.AddComponent<Oculus.Interaction.PokeInteractable>();
+        var pokeInteractor = copy.AddComponent<Oculus.Interaction.PokeInteractor>();
+    
+        // ì½œë¼ì´ë” ì¶”ê°€ (í¬í¬ ì¸í„°ë™ì…˜ì— í•„ìš”)
+        var collider = copy.AddComponent<MeshCollider>();
+        collider.sharedMesh = newFilter.mesh;
+        collider.convex = true;
+    
+        return copy;
     }
 }
