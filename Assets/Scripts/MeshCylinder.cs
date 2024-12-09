@@ -134,23 +134,31 @@ public class MeshCylinder : MonoBehaviour
         
         // Rigidbody 추가 및 설정
         Rigidbody rb = copy.AddComponent<Rigidbody>();
-        rb.useGravity = true;
+        rb.useGravity = false;
         rb.isKinematic = false;
-        rb.drag = 1f;         // 공기 저항 추가
-        rb.angularDrag = 1f;  // 회전 저항 추가
-        rb.mass = 1f;         // 질량 설정
+        rb.drag = 0.3f;         // 공기 저항 추가
+        rb.angularDrag = 0.3f;  // 회전 저항 추가
+        rb.mass = 0.1f;         // 질량 설정
         
         // OVR 컴포넌트들 추가
-        var grabbable = copy.AddComponent<OVRGrabbable>();
-    
-        // 포크 인터랙션을 위한 컴포넌트 추가
-        var pokeInteractable = copy.AddComponent<Oculus.Interaction.PokeInteractable>();
-        var pokeInteractor = copy.AddComponent<Oculus.Interaction.PokeInteractor>();
-    
+        var grabbable = copy.AddComponent<Oculus.Interaction.Grabbable>();
+        grabbable.enabled = true;
+        var grabInteractable = copy.AddComponent<Oculus.Interaction.GrabInteractable>();
+        grabInteractable.enabled = true;
+        grabInteractable.InjectRigidbody(rb);
+        grabInteractable.InjectOptionalPointableElement(grabbable);
+        var distanceGrabInteractable = copy.AddComponent<Oculus.Interaction.DistanceGrabInteractable>();
+        distanceGrabInteractable.enabled = true;
+        distanceGrabInteractable.InjectRigidbody(rb);
+        distanceGrabInteractable.InjectOptionalPointableElement(grabbable);
+
+
+
         // 콜라이더 추가 (포크 인터랙션에 필요)
         var collider = copy.AddComponent<MeshCollider>();
         collider.sharedMesh = newFilter.mesh;
         collider.convex = true;
+        collider.isTrigger = true;  
     
         return copy;
     }
