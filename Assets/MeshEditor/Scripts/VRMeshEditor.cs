@@ -3,19 +3,41 @@ using UnityEngine;
 public class VRMeshEditor : MonoBehaviour
 {
     public GameObject pointer;
-    //public GameObject controller; // ÄÁÆ®·Ñ·¯ ¿ÀºêÁ§Æ®, OVRControllerPrefab µî
-
+    //public GameObject controller; // ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®, OVRControllerPrefab ï¿½ï¿½
+    public AudioClip touchSoundEffect; 
     private MeshDeformer _targetMeshDeformer = null;
     //private Vector3? _targetVertexPos;
+    private AudioSource audioSource;  
+
+    private void Start()
+    {
+        // AudioSource ì´ˆê¸°í™”
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.clip = touchSoundEffect;  // íš¨ê³¼ìŒ ì—°ê²°
+        audioSource.loop = true;              // ë°˜ë³µ ì¬ìƒ ì„¤ì • (ë§Œì§€ëŠ” ë™ì•ˆ ì†Œë¦¬ ë°˜ë³µ)
+        audioSource.playOnAwake = false;      // ì‹œì‘ ì‹œ ìë™ ì¬ìƒ ë°©ì§€
+
+         audioSource.volume = 0.8f;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Cylinder¿¡ ºÎÂøµÈ MeshDeformer¸¦ °¡Á®¿È
+        // Cylinderï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MeshDeformerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         MeshDeformer deformer = GetComponent<MeshDeformer>();
         if (deformer != null)
         {
             _targetMeshDeformer = deformer;
             Debug.Log("Trigger entered");
+
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
         }
     }
 
@@ -23,27 +45,32 @@ public class VRMeshEditor : MonoBehaviour
     {
         if (_targetMeshDeformer != null)
         {
-            // ¼Õ³¡ÀÇ °ø À§Ä¡¸¦ ±â¹İÀ¸·Î ¸Ş½¬ º¯Çü
+            // ï¿½Õ³ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ş½ï¿½ ï¿½ï¿½ï¿½ï¿½
             Vector3 contactPoint = pointer.transform.position;
             Vector3 transformPoint = new Vector3(transform.position.x, contactPoint.y, transform.position.z);
-            _targetMeshDeformer.DeformVertices(contactPoint, transformPoint);  // ÇöÀç À§Ä¡¸¦ º¯ÇüÁ¡À¸·Î »ç¿ë
+            _targetMeshDeformer.DeformVertices(contactPoint, transformPoint);  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // Ãæµ¹ÀÌ ³¡³ª¸é Å¸°Ù ÃÊ±âÈ­
+        // ï¿½æµ¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½Ê±ï¿½È­
         if (GetComponent<MeshDeformer>() == _targetMeshDeformer)
         {
             _targetMeshDeformer = null;
             Debug.Log("Trigger exit");
+
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
         }
     }
 
     /*private void Update()
     {
-        bool isPressLeft = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger); // Æ®¸®°Å ¹öÆ°
-        bool isPressRight = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger); // ±×¸³ ¹öÆ°
+        bool isPressLeft = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger); // Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
+        bool isPressRight = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger); // ï¿½×¸ï¿½ ï¿½ï¿½Æ°
 
         pointer.SetActive(false);
 
@@ -51,14 +78,14 @@ public class VRMeshEditor : MonoBehaviour
         {
             if (isPressRight)
             {
-                // È¸Àü Á¶ÀÛ, ÄÁÆ®·Ñ·¯ÀÇ È¸Àü°ªÀ» Á÷Á¢ »ç¿ëÇØµµ µÊ
+                // È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Øµï¿½ ï¿½ï¿½
                 float speed = 2f;
                 _targetMeshDeformer.transform.Rotate(0f, -OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).x * speed, 0f, Space.World);
                 _targetMeshDeformer.transform.Rotate(OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).y * speed, 0f, 0f, Space.World);
             }
             else if (isPressLeft)
             {
-                Vector3 vertexPos = controller.transform.position; // ÄÁÆ®·Ñ·¯ À§Ä¡¸¦ »ç¿ë
+                Vector3 vertexPos = controller.transform.position; // ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½
                 Vector3 deformerPoint = vertexPos;
                 //_targetMeshDeformer.SetVertex(_targetVertexPos.Value, deformerPoint);
                 _targetMeshDeformer.DeformVertices(_targetVertexPos.Value, deformerPoint);
@@ -69,7 +96,7 @@ public class VRMeshEditor : MonoBehaviour
         }
         else
         {
-            // ÄÁÆ®·Ñ·¯¿¡¼­ ·¹ÀÌÄ³½ºÆ®¸¦ ¹ß»ç
+            // ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß»ï¿½
             Ray ray = new Ray(controller.transform.position, controller.transform.forward);
             float distance = 10f;
 
@@ -86,7 +113,7 @@ public class VRMeshEditor : MonoBehaviour
             }
         }
 
-        // ¹öÆ°À» ¶¼¸é ¼±ÅÃ ÇØÁ¦
+        // ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (!isPressLeft && !isPressRight)
         {
             _targetMeshDeformer = null;

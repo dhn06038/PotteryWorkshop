@@ -6,11 +6,20 @@ public class KilnManager : MonoBehaviour
     public Material glazedMaterial; // 유광 갈색 머티리얼
     public float fadeTime = 1.0f;  // 페이드 시간
     public Transform spawnPoint;    // 새 도자기 생성 위치
+    public AudioClip potterySoundEffect; 
     private Collider triggerCollider;
-
+    private AudioSource audioSource;
     void Start()
     {
         triggerCollider = GetComponent<Collider>();
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        // 효과음 설정
+        audioSource.clip = potterySoundEffect;
+        audioSource.playOnAwake = false; // 자동 재생 방지
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,6 +43,11 @@ public class KilnManager : MonoBehaviour
 
         // 새로운 도자기 생성
         GameObject glazedPot = CreateGlazedPot(originalPot);
+        // 효과음 재생
+        if (audioSource != null && potterySoundEffect != null)
+        {
+            audioSource.Play();
+        }
         
         // 페이드 인
         yield return StartCoroutine(FadeScreen(false));
@@ -86,6 +100,11 @@ public class KilnManager : MonoBehaviour
         distanceGrabInteractable.enabled = true;
         distanceGrabInteractable.InjectRigidbody(rb);
         distanceGrabInteractable.InjectOptionalPointableElement(grabbable);
+
+        if (audioSource != null)
+        {
+            audioSource.Play(); // AudioSource에 설정된 클립을 재생
+        }
         return glazedPot;
     }
 
